@@ -1,4 +1,4 @@
-module github.com/WAY29/icecream-go
+module github.com/ruanhao/icecream-go
 
 go 1.15
 

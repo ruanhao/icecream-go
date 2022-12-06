@@ -2,12 +2,12 @@ package icecream
 
 import (
 	"fmt"
+	"github.com/shurcooL/go/reflectsource"
 	"os"
 	"path/filepath"
 	"reflect"
 	"runtime"
-
-	"github.com/shurcooL/go/reflectsource"
+	"time"
 )
 
 var prefixString = "ic| "
@@ -48,13 +48,14 @@ func Ic(values ...interface{}) []interface{} {
 	funcName := runtime.FuncForPC(pc).Name()
 	pwd, _ := os.Getwd()
 	relFilename, _ := filepath.Rel(pwd, filename)
+	ts := time.Now().Format("2006-01-02 15:04:05.000")
 	if ok {
 		lenOfValues := len(values)
 		if lenOfValues > 0 { // ? print value
 			if includeContext { // ? print prefix
-				msg = fmt.Sprintf("%s%s:%d in %s()- ", prefixString, relFilename, line, funcName)
+				msg = fmt.Sprintf("%s%s | %s:%d | %s() | ", prefixString, ts, relFilename, line, funcName)
 			} else {
-				msg = prefixString
+				msg = fmt.Sprintf("%s%s | ", prefixString, ts)
 			}
 			printMsg(msg)
 			for i, v := range values { // ? print value
@@ -75,7 +76,7 @@ func Ic(values ...interface{}) []interface{} {
 			}
 			printMsg("\n")
 		} else { // ? print line if value is nil
-			msg = fmt.Sprintf("%s%s:%d in %s()\n", prefixString, relFilename, line, funcName)
+			msg = fmt.Sprintf("%s%s | %s:%d | %s()\n", prefixString, ts, relFilename, line, funcName)
 			printMsg(msg)
 		}
 	}
